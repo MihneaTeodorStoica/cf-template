@@ -127,13 +127,13 @@ struct PairHash {
 // ============================ problem glue =======================
 /**
  * Problem: ${title}
- * URL:    ${url}
- * TL:     ${timeLimit} ms
+ * URL:     ${url}
+ * TL:      ${timeLimit} ms
  */
 signed TC = 1, TT = 1;
 
 inline void tc(){
-    
+
 }
 
 signed main(){
