@@ -10,7 +10,7 @@
 #include <bits/extc++.h>
 using namespace std;
 using namespace __gnu_pbds;
-template<typename... Args>void debug(const Args&...) {}
+template<typename... Args>void debug(const Args&...);
 // ===============================================================
 /**
  * Problem name: ${title}
