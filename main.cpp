@@ -10,6 +10,7 @@
 #include <bits/extc++.h>
 using namespace std;
 using namespace __gnu_pbds;
+template<typename... Args>void debug(const Args&...) {}
 // ===============================================================
 /**
  * Problem name: ${title}
@@ -29,15 +30,11 @@ inline void tc() {
 #define FILENAME           ""
 // ===============================================================
 #if DEBUG
-template<typename T>
-void _print_one(const T& x) { cerr << x; }
-template<typename T, typename... Args>
-void _print_one(const T& first, const Args&... rest) { cerr << first; _print_one(rest...); }
-template<typename... Args>
-void debug(const Args&... args) { _print_one(args...); cerr << "\n"; }
+template<typename T> void _print_one(const T& x) { cerr << x; }
+template<typename T, typename... Args> void _print_one(const T& first, const Args&... rest) { cerr << first; _print_one(rest...); }
+template<typename... Args> void debug(const Args&... args) { _print_one(args...); cerr << "\n"; }
 #else
-template<typename... Args>
-void debug(const Args&...) {}
+template<typename... Args> void debug(const Args&...) {}
 #endif
 signed main() {
 #if FASTIO
