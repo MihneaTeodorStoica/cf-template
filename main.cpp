@@ -18,10 +18,6 @@ using namespace std;
 #define FILEIO             0
 #define FILENAME           ""  // used only if FILEIO==1
 
-// feature toggles
-#define USE_RNG            0   // SplitMix64 RNG
-#define USE_FASTSCAN       0   // fread-based scanner
-
 // ============================ base types =========================
 #if DEFINE_INT_LL
 #  define int long long
@@ -85,32 +81,6 @@ struct Timer {
         std::cerr << "Time: " << std::chrono::duration_cast<std::chrono::milliseconds>(d).count() << " ms\n";
     }
 } _timer_guard;
-#endif
-
-// ============================== RNG ==============================
-#if USE_RNG
-static uint64_t splitmix64(uint64_t x){ x+=0x9e3779b97f4a7c15ULL; x=(x^(x>>30))*0xbf58476d1ce4e5b9ULL; x=(x^(x>>27))*0x94d049bb133111ebULL; return x^(x>>31); }
-struct FastRNG{
-    uint64_t s; FastRNG(): s(chrono::high_resolution_clock::now().time_since_epoch().count()) {}
-    uint64_t operator()(){ return s = splitmix64(s); }
-    uint64_t operator()(uint64_t lim){ return operator()()%lim; }
-    template<class It> void shuffle(It l, It r){ for(auto n=r-l; n>1; --n){ auto j=(*this)(n); iter_swap(l+(n-1), l+j); } }
-} rng;
-#endif
-
-// ============================== FastScan =========================
-#if USE_FASTSCAN
-struct FastScan {
-    static constexpr size_t BUFSZ = 1<<20;
-    int idx=0, len=0; char buf[BUFSZ];
-    inline char gc(){ if(idx>=len){ len = (int)fread(buf,1,BUFSZ,stdin); idx=0; if(!len) return 0; } return buf[idx++]; }
-    template<class T> bool readInt(T& out){
-        char c; T sgn=1, x=0; do{ c=gc(); if(!c) return false; }while(c<=32);
-        if(c=='-'){ sgn=-1; c=gc(); }
-        for(; c>' '; c=gc()) x = x*10 + (c-'0');
-        out = x*sgn; return true;
-    }
-} In;
 #endif
 
 // ============================== helpers ==========================
