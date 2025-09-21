@@ -6,21 +6,30 @@
 /_/  /_/\__,_/\__,_/\___/  /_.___/\__, /  /_/  /_/_/_/ /_/_/ /_/\___/\__,_//_/  \___/\____/\__,_/\____/_/   /____/\__/\____/_/\___/\__,_/  
                                  /____/                                                                                                    
 */
-#pragma GCC optimize("Ofast,unroll-loops,inline-functions")
+
+// -------- optional compile fences for judges that ban pragmas --------
+/* #define NO_PRAGMAS 1 */
+#ifndef NO_PRAGMAS
+  #pragma GCC optimize("Ofast,unroll-loops,inline-functions")
+  #if defined(__GNUC__) && defined(__x86_64__)
+    #pragma GCC target("sse4.2,avx2,bmi2,fma,popcnt,arch=skylake,tune=native")
+  #endif
+#endif
+
 #include <bits/stdc++.h>
-#pragma GCC target("sse4.2,avx2,bmi2,fma,popcnt,arch=skylake,tune=native")
 using namespace std;
 
 // ============================ toggles ============================
-#define MULTIPLE_TESTCASES 1
-#define DEFINE_INT_LL      0
-#define DEBUG              0
+#define MULTIPLE_TESTCASES 1   // 1 => read T; 0 => single test
+#define DEFINE_INT_LL      1   // 1 => #define int long long
+#define DEBUG              0   // 1 => enable DBG/DUMP/ASSERT + Timer
 #define FASTIO             1
 #define FILEIO             0
-#define FILENAME           ""
+#define FILENAME           ""  // used only if FILEIO==1
 
 // feature toggles
-#define USE_RNG            0
+#define USE_RNG            0   // SplitMix64 RNG
+#define USE_FASTSCAN       0   // fread-based scanner
 
 // ============================ base types =========================
 #if DEFINE_INT_LL
@@ -32,11 +41,9 @@ using uint = unsigned int;
 using ll = long long; using ull = unsigned long long; using ld = long double;
 
 // ============================== debug ============================
-// Zero-overhead when DEBUG==0. Pretty-prints scalars, pairs, tuples, ranges.
 #if DEBUG
 namespace dbg {
     using std::cerr; using std::string; using std::string_view;
-
     template<class T, class = void> struct is_iterable : std::false_type {};
     template<class T> struct is_iterable<T, std::void_t<decltype(begin(std::declval<T>())), decltype(end(std::declval<T>()))>> : std::true_type {};
     template<class T> inline constexpr bool is_stringlike =
@@ -46,7 +53,6 @@ namespace dbg {
     inline void _print(const char* s){ cerr<<s; } inline void _print(char c){ cerr<<c; }
     inline void _print(bool b){ cerr<<(b?"true":"false"); }
     template<class T> std::enable_if_t<!is_iterable<T>::value && !is_stringlike<T>> _print(const T& x){ cerr<<x; }
-
     template<class A, class B> void _print(const pair<A,B>& p){ cerr<<'(' ; _print(p.first); cerr<<','; _print(p.second); cerr<<')'; }
     template<class... Ts> void _print(const tuple<Ts...>& t){
         cerr<<'(';
@@ -56,7 +62,6 @@ namespace dbg {
     template<class T> std::enable_if_t<is_iterable<T>::value && !is_stringlike<T>> _print(const T& a){
         cerr<<'['; bool f=true; for (auto const& v: a){ if(!f) cerr<<','; f=false; _print(v);} cerr<<']';
     }
-
     inline void _split_names(string_view s, vector<string_view>& out){
         size_t i=0, n=s.size(), par=0, brk=0, ang=0;
         auto flush=[&](size_t l,size_t r){ while(l<r && s[l]==' ') ++l; while(r>l && s[r-1]==' ') --r; if(l<r) out.emplace_back(s.substr(l,r-l)); };
@@ -80,7 +85,18 @@ namespace dbg {
 #  define ASSERT(x)  do{ (void)sizeof(x); }while(0)
 #endif
 
-// ============================== rng ==============================
+// ============================== micro-profiler ===================
+#if DEBUG
+struct Timer {
+    std::chrono::steady_clock::time_point t = std::chrono::steady_clock::now();
+    ~Timer(){
+        auto d = std::chrono::steady_clock::now() - t;
+        std::cerr << "Time: " << std::chrono::duration_cast<std::chrono::milliseconds>(d).count() << " ms\n";
+    }
+} _timer_guard;
+#endif
+
+// ============================== RNG ==============================
 #if USE_RNG
 static uint64_t splitmix64(uint64_t x){ x+=0x9e3779b97f4a7c15ULL; x=(x^(x>>30))*0xbf58476d1ce4e5b9ULL; x=(x^(x>>27))*0x94d049bb133111ebULL; return x^(x>>31); }
 struct FastRNG{
@@ -91,6 +107,62 @@ struct FastRNG{
 } rng;
 #endif
 
+// ============================== FastScan =========================
+#if USE_FASTSCAN
+struct FastScan {
+    static constexpr size_t BUFSZ = 1<<20;
+    int idx=0, len=0; char buf[BUFSZ];
+    inline char gc(){ if(idx>=len){ len = (int)fread(buf,1,BUFSZ,stdin); idx=0; if(!len) return 0; } return buf[idx++]; }
+    template<class T> bool readInt(T& out){
+        char c; T sgn=1, x=0; do{ c=gc(); if(!c) return false; }while(c<=32);
+        if(c=='-'){ sgn=-1; c=gc(); }
+        for(; c>' '; c=gc()) x = x*10 + (c-'0');
+        out = x*sgn; return true;
+    }
+} In;
+#endif
+
+// ============================== helpers ==========================
+// Y-combinator (recursive lambdas)
+template<class F> struct Fix : F { using F::F; template<class... A> decltype(auto) operator()(A&&... a) const { return F::operator()(*this, std::forward<A>(a)...); } };
+template<class F> Fix(F) -> Fix<F>;
+
+// __int128 printing
+using i128 = __int128_t; using u128 = __uint128_t;
+inline std::ostream& operator<<(std::ostream& os, i128 v){
+    if(v < 0){ os << '-'; v = -v; }
+    char s[40]; int n=0; do{ s[n++] = char('0' + (int)(v % 10)); v /= 10; }while(v);
+    while(n--) os << s[n]; return os;
+}
+
+// math helpers
+template<class T> inline bool chmin(T& a, const T& b){ if(b < a){ a = b; return true; } return false; }
+template<class T> inline bool chmax(T& a, const T& b){ if(b > a){ a = b; return true; } return false; }
+// For a>=0, b>0
+template<class T> constexpr T ceil_div_pos(T a, T b){ return (a + b - 1) / b; }
+template<class T> constexpr T floor_div_pos(T a, T b){ return a / b; }
+
+// grid directions
+constexpr int dx4[4] = {-1, 1, 0, 0};
+constexpr int dy4[4] = { 0, 0,-1, 1};
+constexpr int dx8[8] = {-1,-1,-1, 0,0, 1, 1, 1};
+constexpr int dy8[8] = {-1, 0, 1,-1,1,-1, 0, 1};
+
+// vector I/O
+template<class T> inline void read_vec(std::vector<T>& a, int n){ a.resize(n); for(int i=0;i<n;++i) cin >> a[i]; }
+template<class T> inline void print_vec(const std::vector<T>& a, char sep=' ', char end='\n'){
+    for(int i=0;i<(int)a.size();++i){ if(i) cout << sep; cout << a[i]; } cout << end;
+}
+
+// pair hash (generic)
+inline void hash_combine(std::size_t& seed, std::size_t v){ seed ^= v + 0x9e3779b97f4a7c15ULL + (seed<<6) + (seed>>2); }
+struct PairHash {
+    template<class A, class B>
+    size_t operator()(const std::pair<A,B>& p) const noexcept {
+        size_t h=0; hash_combine(h, std::hash<A>{}(p.first)); hash_combine(h, std::hash<B>{}(p.second)); return h;
+    }
+};
+
 // ============================ problem glue =======================
 /**
  * Problem: ${title}
@@ -99,7 +171,7 @@ struct FastRNG{
  */
 signed TC = 1, TT = 1;
 
-inline void tc() {
+inline void tc(){
     
 }
 
