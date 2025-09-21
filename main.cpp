@@ -13,14 +13,14 @@ using namespace std;
 
 // ============================ toggles ============================
 #define MULTIPLE_TESTCASES 1
-#define DEFINE_INT_LL      1
+#define DEFINE_INT_LL      0
 #define DEBUG              0
 #define FASTIO             1
 #define FILEIO             0
 #define FILENAME           ""
 
 // feature toggles
-#define USE_RNG            1
+#define USE_RNG            0
 
 // ============================ base types =========================
 #if DEFINE_INT_LL
