@@ -21,7 +21,7 @@ using namespace std;
 // ============================ base types =========================
 #if DEFINE_INT_LL
 #  define int long long
-using uint = unsigned long long;
+#  define uint unsigned long long
 #else
 using uint = unsigned int;
 #endif
