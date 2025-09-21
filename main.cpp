@@ -7,15 +7,6 @@
                                  /____/                                                                                                    
 */
 
-// -------- optional compile fences for judges that ban pragmas --------
-/* #define NO_PRAGMAS 1 */
-#ifndef NO_PRAGMAS
-  #pragma GCC optimize("Ofast,unroll-loops,inline-functions")
-  #if defined(__GNUC__) && defined(__x86_64__)
-    #pragma GCC target("sse4.2,avx2,bmi2,fma,popcnt,arch=skylake,tune=native")
-  #endif
-#endif
-
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -132,7 +123,7 @@ using i128 = __int128_t; using u128 = __uint128_t;
 inline std::ostream& operator<<(std::ostream& os, i128 v){
     if(v < 0){ os << '-'; v = -v; }
     char s[40]; int n=0; do{ s[n++] = char('0' + (int)(v % 10)); v /= 10; }while(v);
-    while(n--) os << s[n]; return os;
+    while(n--) { os << s[n]; } return os;
 }
 
 // math helpers
