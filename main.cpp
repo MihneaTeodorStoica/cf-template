@@ -6,8 +6,10 @@
 /_/  /_/\__,_/\__,_/\___/  /_.___/\__, /  /_/  /_/_/_/ /_/_/ /_/\___/\__,_//_/  \___/\____/\__,_/\____/_/   /____/\__/\____/_/\___/\__,_/  
                                  /____/                                                                                                    
 */
+#pragma GCC optimize("Ofast,unroll-loops,inline-functions")
 #include <bits/stdc++.h>
 #include <bits/extc++.h>
+#pragma GCC target("sse4.2,avx2,bmi2,fma,popcnt,arch=skylake,tune=native")
 using namespace std;
 using namespace __gnu_pbds;
 template<typename... Args>void debug(const Args&...);
@@ -21,7 +23,7 @@ template<typename... Args>void debug(const Args&...);
  */
 int TC = 1, TT = 1;
 inline void tc() {
-
+    
 }
 #define MULTIPLE_TESTCASES 1
 #define DEBUG              0
