@@ -30,9 +30,9 @@ inline void tc() {
 #define FILENAME           ""
 // ===============================================================
 #if DEBUG
-template<typename T> void _print_one(const T& x) { cerr << x; }
-template<typename T, typename... Args> void _print_one(const T& first, const Args&... rest) { cerr << first; _print_one(rest...); }
-template<typename... Args> void debug(const Args&... args) { _print_one(args...); cerr << "\n"; }
+template<typename T> void _print_one(const T& x) { cout << x; }
+template<typename T, typename... Args> void _print_one(const T& first, const Args&... rest) { cout << first; _print_one(rest...); }
+template<typename... Args> void debug(const Args&... args) { _print_one(args...); cout << "\n"; }
 #else
 template<typename... Args> void debug(const Args&...) {}
 #endif
