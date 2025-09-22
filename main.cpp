@@ -129,6 +129,8 @@ struct PairHash {
  * Problem: ${title}
  * URL:     ${url}
  * TL:      ${timeLimit} ms
+ * 
+ * Good Luck!
  */
 signed TC = 1, TT = 1;
 
