@@ -143,12 +143,8 @@ signed main(){
     ios::sync_with_stdio(false); cin.tie(nullptr);
 #endif
 #if FILEIO
-  #if FILENAME[0] != '\0'
     freopen(FILENAME ".in", "r", stdin);
     freopen(FILENAME ".out", "w", stdout);
-  #else
-    #error "FILEIO enabled but FILENAME is empty"
-  #endif
 #endif
 
 #if MULTIPLE_TESTCASES
