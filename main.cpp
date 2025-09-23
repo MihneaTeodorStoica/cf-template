@@ -143,8 +143,8 @@ signed main(){
     ios::sync_with_stdio(false); cin.tie(nullptr);
 #endif
 #if FILEIO
-    freopen(FILENAME ".in", "r", stdin);
-    freopen(FILENAME ".out", "w", stdout);
+    (void)!freopen(FILENAME ".in", "r", stdin);
+    (void)!freopen(FILENAME ".out", "w", stdout);
 #endif
 
 #if MULTIPLE_TESTCASES
