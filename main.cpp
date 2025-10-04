@@ -14,7 +14,7 @@ inline void tc() {
 
 #define FILEIO 0
 #define FILE ""
-int main() {
+signed main() {
 #if FILEIO && !defined(LOCAL)
     freopen(FILE ".in", "r", stdin);
     freopen(FILE ".out", "w", stdout);
