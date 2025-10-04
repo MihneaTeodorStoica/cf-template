@@ -4,8 +4,8 @@ using namespace std;
 /**
  * Problem: ${title}
  * URL: ${url}
- * TL: ${timeLimit}
- * ML: ${memoryLimit}
+ * TL: ${timeLimit} ms
+ * ML: ${memoryLimit} MB
  */
 #define MULTITEST 1
 #define int long long
