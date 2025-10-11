@@ -7,23 +7,23 @@ using namespace std;
  * TL: ${timeLimit} ms
  * ML: ${memoryLimit} MB
  */
-#define MULTITEST 1
-#define int long long
-inline void tc() {
-
+using ll = long long;
+// #define int ll
+void tc() {
+    
 }
 
+#define MULTITEST 1
 #define FILEIO 0
 #define FILE ""
-signed main() {
+
+int main() {
 #if FILEIO && !defined(LOCAL)
-    (void)!freopen(FILE ".in", "r", stdin);
-    (void)!freopen(FILE ".out", "w", stdout);
+    (void)!freopen(FILE ".in", "r", stdin); (void)!freopen(FILE ".out", "w", stdout);
 #endif
     ios_base::sync_with_stdio(false); cin.tie(nullptr);
-#if MULTITEST == 1
-    int tt; cin >> tt;
-    while (tt--) { tc(); }
+#if MULTITEST
+    int T; cin >> T; while (T --) tc();
 #else
     tc();
 #endif
