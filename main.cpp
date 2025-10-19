@@ -6,7 +6,7 @@ using namespace std;
  * URL: ${url}
  * TL: ${timeLimit} ms
  * ML: ${memoryLimit} MB
- * 
+ *
  * Good Luck!
  */
 using ll = long long;
