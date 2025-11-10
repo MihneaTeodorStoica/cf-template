@@ -1,6 +1,16 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+using ll = long long;
+using ld = long double;
+using uint = unsigned int;
+using ull = unsigned long long;
+
+#if 0
+#define int ll
+#define uint ull
+#endif
+
 /**
  * Problem: ${title}
  * URL: ${url}
@@ -9,23 +19,24 @@ using namespace std;
  *
  * Good Luck!
  */
-using ll = long long;
-// #define int ll
 void tc() {
-    
+
 }
 
-#define MULTITEST 1
-#define FILEIO 0
-#define FILE ""
+#define MTC 1
+#define FIO 0
+#define FN ""
 
 signed main() {
-#if FILEIO && !defined(LOCAL)
-    (void)!freopen(FILE ".in", "r", stdin); (void)!freopen(FILE ".out", "w", stdout);
+#if FIO == 1 && !defined(LOCAL)
+    (void)freopen(FN ".in", "r", stdin);
+    (void)freopen(FN ".out", "w", stdout);
 #endif
-    ios_base::sync_with_stdio(false); cin.tie(nullptr);
-#if MULTITEST
-    int T; cin >> T; while (T --) tc();
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+#if MTC == 1
+    signed tt; cin >> tt;
+    while (tt --) tc();
 #else
     tc();
 #endif
